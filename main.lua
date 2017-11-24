@@ -11,11 +11,13 @@ end
 
 function playerUpdateY()
    if player.isJumping then
+      game.score = game.score + 1
       player.y = player.y - jumpSpeed
       if player.y < jumpHeight then
          player.isJumping = false
       end
    else
+      game.score = game.score - (1 * 0.4)
       player.y = player.y + (jumpSpeed * 0.4)
       if player.y > stage.height then
          game.state = 'over'
@@ -40,6 +42,7 @@ end
 function love.load()
    game = {}
    game.state = 'play'
+   game.score = 0
 
    stage = {}
    stage.width = love.graphics.getWidth()
@@ -92,6 +95,8 @@ function love.draw()
 
    love.graphics.setColor( 255, 255, 255, 255 )
    love.graphics.draw( player.sprite, player.x, player.y)
+
+   love.graphics.print("Height: ".. math.floor(game.score), 300, 30)
 end
 
 function love.keypressed( key, scancode, isrepeat )
