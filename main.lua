@@ -3,8 +3,8 @@ function playerUpdateX()
 
    if player.x < 0 then
       player.x = 0
-   elseif player.x > stage.width - (player.w * 0.8)  then
-      player.x = stage.width - (player.w * 0.8)
+   elseif player.x > stage.width - player.w  then
+      player.x = stage.width - player.w
    end
 
 end
@@ -19,6 +19,19 @@ function playerUpdateY()
       player.y = player.y + (jumpSpeed * 0.4)
       if player.y > stage.height then
          game.state = 'over'
+      end
+   end
+end
+
+function playerCollision()
+   if not player.isJumping then
+      for i=1, platformCount do
+         if platforms[i].y - wiggleRoom < player.y + player.h and
+            platforms[i].y > player.y + player.h and
+            player.x > platforms[i].x - (player.w / 2) and
+         player.x + player.w < platforms[i].x + platforms[i].w + wiggleRoom then
+            player.isJumping = true
+         end
       end
    end
 end
@@ -41,15 +54,28 @@ function love.load()
    --player.jumpingSound = love.audio.newSource("")
    player.sprite = love.graphics.newImage("tessa.png")
 
+   platformCount = 3
+   platforms = {}
+   for i=1, platformCount do
+      platforms[i] = {}
+      platforms[i].x = 50 + (i * 50)
+      platforms[i].y = 300 + (i * 80)
+      platforms[i].w = 300
+      platforms[i].h = 10
+   end
+
    jumpHeight = 150
    jumpSpeed = 3
    jumpForceDirection = 0
    jumpForce = 2
+
+   wiggleRoom = 5
 end
 
 function love.update()
    playerUpdateX()
    playerUpdateY()
+   playerCollision()
 end
 
 
@@ -58,10 +84,14 @@ function love.draw()
       love.graphics.print("Game Over!", 100, 100)
    end
 
-   love.graphics.setColor( 50, 50, 50, 255 )
-   love.graphics.rectangle( 'fill', 50, 300, 100, 10 )
+   love.graphics.setColor( 100, 100, 100, 255 )
+
+   for i=1, platformCount do
+      love.graphics.rectangle( 'fill', platforms[i].x, platforms[i].y, platforms[i].w, platforms[i].h)
+   end
+
    love.graphics.setColor( 255, 255, 255, 255 )
-   love.graphics.draw( player.sprite, player.x, player.y, 0, 0.2)
+   love.graphics.draw( player.sprite, player.x, player.y)
 end
 
 function love.keypressed( key, scancode, isrepeat )
