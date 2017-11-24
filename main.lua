@@ -1,5 +1,16 @@
 function love.load()
+   stage = {}
+   stage.width = love.graphics.getWidth()
+   stage.height = love.graphics.getHeight()
 
+   player = {}
+   player.w = 100
+   player.h = 100
+   player.x = stage.width / 2 - 50
+   player.y = stage.height - 100
+   player.isJumping = false
+   player.jumpingSound = love.audio.newSource("")
+   player.sprite = love.graphics.newImage("tessa.png")
 end
 
 
@@ -9,5 +20,5 @@ end
 
 
 function love.draw()
-   love.graphics.print('Hello World!', 200, 100)
+   love.graphics.draw( player.sprite, player.x, player.y)
 end
