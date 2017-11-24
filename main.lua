@@ -58,6 +58,9 @@ function love.draw()
       love.graphics.print("Game Over!", 100, 100)
    end
 
+   love.graphics.setColor( 50, 50, 50, 255 )
+   love.graphics.rectangle( 'fill', 50, 300, 100, 10 )
+   love.graphics.setColor( 255, 255, 255, 255 )
    love.graphics.draw( player.sprite, player.x, player.y, 0, 0.2)
 end
 
